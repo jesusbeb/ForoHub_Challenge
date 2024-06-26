@@ -21,7 +21,7 @@ public class TopicosController {
 
     //Metodo para registrar topico. Request de tipo POST
     @PostMapping
-    public void RegistrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico){
+    public void RegistrarTopico(@RequestBody  @Valid DatosRegistroTopico datosRegistroTopico){
         topicoRepository.save(new Topico(datosRegistroTopico));
     }
 }
