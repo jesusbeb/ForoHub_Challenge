@@ -33,12 +33,14 @@ public class Topico {
     private String titulo;
     private String mensaje;
     private LocalDateTime fechaCreacion;
+    private Boolean estado;
 
     public Topico(DatosRegistroTopico datosRegistroTopico) {
         this.nombreCurso = datosRegistroTopico.nombreCurso();
         this.titulo = datosRegistroTopico.titulo();
         this.mensaje = datosRegistroTopico.mensaje();
         this.fechaCreacion = LocalDateTime.now();
+        this.estado = true;
     }
 }
 
