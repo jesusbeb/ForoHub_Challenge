@@ -1,7 +1,9 @@
 package com.alura.ForoHub_Challenge.controller;
 
+import com.alura.ForoHub_Challenge.dto.DatosDetalleTopico;
 import com.alura.ForoHub_Challenge.dto.DatosListadoTopico;
 import com.alura.ForoHub_Challenge.dto.DatosRegistroTopico;
+import com.alura.ForoHub_Challenge.model.Topico;
 import com.alura.ForoHub_Challenge.repository.TopicoRepository;
 import com.alura.ForoHub_Challenge.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 //RestController para indicar a Spring que es un controller
 //RequestMapping para mapear la ruta o path topicos
@@ -23,10 +28,25 @@ public class TopicoController {
     @Autowired
     private TopicoService topicoService;
 
-    //Metodo para registrar topico. Request de tipo POST
+    //Metodo para registrar topico. Request de tipo POST. Retorna codigo 201 de objeto creado
+    //El metodo retorna un ResponseEntity que acepta un parametro generico por lo que se le indica que
+    //sera del tipo DatosDetalleTopico. Recibe el json DatosRegistroTopico del cliente
+    //Se crea el topico en la BD usando el metodo crearTopico de topicoService
+    //Se mapea un nuevo objeto de tipo DatosDetalleTopico con el Topico creado, para retornar al cliente
+    //Se retorna un ResponseEntity.created que es un codigo 201, created pide la url donde el objeto
+    //creado sera encontrado. Por lo que se crea una URI llamada url usando una clase auxiliar (helper) llamada
+    //UriComponentsBuilder para obtener los datos del servidor y se invoca en los parametros del metodo.
+    //Se usa el metodo path y se le envia dicho path con el id dinamico. Para hacer el id dinamico se
+    //usa el metodo buildAndExpand y se le envia el id del topico, finalmente se convierte a Uri
+    //En el retorno tambien pide un body que es el datosDetalleTopico
     @PostMapping
-    public void RegistrarTopico(@RequestBody  @Valid DatosRegistroTopico datosRegistroTopico){
+    public ResponseEntity<DatosDetalleTopico> RegistrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico,
+                                                              UriComponentsBuilder uriComponentsBuilder){
         var topico = topicoService.crearTopico(datosRegistroTopico);
+        DatosDetalleTopico datosDetalleTopico = new DatosDetalleTopico(topico.getId(), topico.getNombreCurso(),
+                topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion(), topico.getEstado() ? "Abierto" : "Cerrado");
+        URI url = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
+        return ResponseEntity.created(url).body(datosDetalleTopico);
     }
 
     //Metodo para listar una paginacion de todos los topicos de la BD. Request del tipo GET
