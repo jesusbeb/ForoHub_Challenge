@@ -1,5 +1,6 @@
 package com.alura.ForoHub_Challenge.model;
 
+import com.alura.ForoHub_Challenge.dto.DatosListadoTopico;
 import com.alura.ForoHub_Challenge.dto.DatosRegistroTopico;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,9 @@ import java.time.LocalDateTime;
 //getters, constructor sin argumentos y constructor con todos los argumentos. Todo en tiempo de ejecucion
 //EqualsAndHashcode usa el parametro id para comparar entre topicos para inferir si son iguales o diferentes, es
 //como sobreescribir el metodo hashCode y el metodo Equals pero lombok lo hace automaticamente
+//CascadeType.ALL se utiliza para aplicar todas las operaciones de cascada a la relacion entre entidades. Esto
+//significa que cualquier operacion que se realice en esta entidad padre, se aplicara en las entidades hijo asociadas
+//JoinColumn especifica la columna en la BD de esta entidad que se usara para unir las dos tablas
 //SE USARA LA DEPENDENCIA FLYWAY que es una herramienta de migracion de datos, para crear la tabla topicos a traves
 //de codigo SQL. En la carpeta resources creo nueva carpeta llamada db y dentro de ella otra carpeta llamada
 //migration. Luego se crea un archivo con extencion .sql. Mas informacion abajo
@@ -34,13 +38,18 @@ public class Topico {
     private String mensaje;
     private LocalDateTime fechaCreacion;
     private Boolean estado;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "autor_id")
+    private Usuario autor;
 
-    public Topico(DatosRegistroTopico datosRegistroTopico) {
-        this.nombreCurso = datosRegistroTopico.nombreCurso();
-        this.titulo = datosRegistroTopico.titulo();
-        this.mensaje = datosRegistroTopico.mensaje();
+    //Constructor
+    public Topico(Curso nombreCurso, String titulo, String mensaje, Usuario autor){
+        this.nombreCurso = nombreCurso;
+        this.titulo = titulo;
+        this.mensaje = mensaje;
         this.fechaCreacion = LocalDateTime.now();
         this.estado = true;
+        this.autor = autor;
     }
 }
 

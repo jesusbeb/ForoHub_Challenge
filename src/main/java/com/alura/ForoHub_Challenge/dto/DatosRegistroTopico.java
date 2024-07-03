@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 //NotBlank y NotNull no es lo mismo, pero internamente NotBlank tambien hace lo mismo que NotNull
 //NotBlank sirve para String, NotNull para cualquier otro objeto
 public record DatosRegistroTopico(
-        //@NotNull
+        @NotNull
         Long idUsuario,
         @NotNull
         Curso nombreCurso,
