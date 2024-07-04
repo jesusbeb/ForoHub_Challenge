@@ -85,6 +85,18 @@ public class TopicoController {
     }
 
 
+    //Metodo endpoint para eliminar un topico
+    //Se necesita retornar un codigo 204, por lo que se usa la clase ResponseEntity y se usa el
+    //metodo estatico noContent(), finalmente con build() se convierte a ResponseEntity
+    //204 significa que la operacion fue exitosa pero no hay contenido que retornar porque se elimino el objeto
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity eliminarTopico(@PathVariable Long id){
+        topicoRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
     //Metodo para listar una paginacion de todos los topicos de la BD. Request del tipo GET
     //Metodo que devuelve un ResponseEntity de tipo Page<DatosListadoTopico>
     //Se le envia un parametro que llega del frontend del tipo Pageable, el cual puede ser opcional.
@@ -103,10 +115,5 @@ public class TopicoController {
     public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 3) Pageable paginacion){
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
-
-
-
-
-
 
 }
