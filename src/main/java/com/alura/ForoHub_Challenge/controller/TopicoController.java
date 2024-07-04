@@ -28,6 +28,7 @@ public class TopicoController {
     @Autowired
     private TopicoService topicoService;
 
+
     //Metodo para registrar topico. Request de tipo POST. Retorna codigo 201 de objeto creado
     //El metodo retorna un ResponseEntity que acepta un parametro generico por lo que se le indica que
     //sera del tipo DatosDetalleTopico. Recibe el json DatosRegistroTopico del cliente
@@ -49,6 +50,22 @@ public class TopicoController {
         return ResponseEntity.created(url).body(datosDetalleTopico);
     }
 
+
+    //Metodo para mostrar un topico en una url enviando el id, p.e. http://localhost:8080/topicos/2
+    //Si este metodo no se implementa, el cliente obtiene un error 405 al consultar una url con el id
+    //El metodo recibe como parametro dinamico, el id del topico a mostrar
+    //Se obtiene el topico mediante una consulta a la BD con el repositorio
+    //Se mapea un objeto de tipo DatosDetalleTopico con el topico obtenido de la BD, para mostrarlo al cliente
+    //Se retorna un ResponseEntity.ok con el objeto datosDetalleTopico
+    @GetMapping("/{id}")
+    public ResponseEntity<DatosDetalleTopico> retornaDatosTopico(@PathVariable Long id){
+        Topico topico = topicoRepository.getReferenceById(id);
+        var datosTopico = new DatosDetalleTopico(topico.getId(), topico.getNombreCurso(), topico.getTitulo(),
+                topico.getMensaje(), topico.getFechaCreacion(), topico.getEstado() ? "Abierto" : "Cerrado");
+        return ResponseEntity.ok(datosTopico);
+    }
+
+
     //Metodo para listar una paginacion de todos los topicos de la BD. Request del tipo GET
     //Metodo que devuelve un ResponseEntity de tipo Page<DatosListadoTopico>
     //Se le envia un parametro que llega del frontend del tipo Pageable, el cual puede ser opcional.
@@ -67,5 +84,8 @@ public class TopicoController {
     public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 3) Pageable paginacion){
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
+
+
+
 
 }
