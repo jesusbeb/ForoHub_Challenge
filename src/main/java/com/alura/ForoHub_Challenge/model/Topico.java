@@ -1,7 +1,6 @@
 package com.alura.ForoHub_Challenge.model;
 
-import com.alura.ForoHub_Challenge.dto.DatosListadoTopico;
-import com.alura.ForoHub_Challenge.dto.DatosRegistroTopico;
+import com.alura.ForoHub_Challenge.dto.DatosActualizarTopico;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -51,7 +50,20 @@ public class Topico {
         this.estado = true;
         this.autor = autor;
     }
+
+    //Metodo para actualizar el titulo o mensaje del topico
+    public void actualizarTopico(DatosActualizarTopico datosActualizarTopico){
+        if (datosActualizarTopico.titulo() != null){
+            this.titulo = datosActualizarTopico.titulo();
+        }
+        if (datosActualizarTopico.mensaje() != null){
+            this.mensaje = datosActualizarTopico.mensaje();
+        }
+    }
 }
+
+
+
 
 
 /*

@@ -1,5 +1,6 @@
 package com.alura.ForoHub_Challenge.controller;
 
+import com.alura.ForoHub_Challenge.dto.DatosActualizarTopico;
 import com.alura.ForoHub_Challenge.dto.DatosDetalleTopico;
 import com.alura.ForoHub_Challenge.dto.DatosListadoTopico;
 import com.alura.ForoHub_Challenge.dto.DatosRegistroTopico;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -66,6 +68,23 @@ public class TopicoController {
     }
 
 
+    //Metodo endpoint para actualizar un topico
+    //Por regla de negocio, acepta solicitudes del tipo PUT para la URI /topicos/{id}
+    //Transactional cierra la transaccion para que el metodo actualice los datos en la BD
+    //RequestBody para indicar que el parametro puede llegar por una solicitud HTTP POST con un cuerpo JSON
+    //Valid para validar el cuerpo de la solicitud por si tiene errores de sintaxis en el json
+    //@PathVariable se utiliza para extraer valores de la URL y asignarlos al parametro
+    //Se retorna ResponseEntity.ok que significa codigo 200 y se retorna el objeto actualizado.
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity actualizarTopico(@RequestBody @Valid DatosActualizarTopico datosActualizarTopico, @PathVariable Long id){
+        Topico topico = topicoRepository.getReferenceById(id);
+        topico.actualizarTopico(datosActualizarTopico);
+        return ResponseEntity.ok(new DatosDetalleTopico(topico.getId(), topico.getNombreCurso(), topico.getTitulo(),
+                topico.getMensaje(), topico.getFechaCreacion(), topico.getEstado() ? "Abierto" : "Cerrado"));
+    }
+
+
     //Metodo para listar una paginacion de todos los topicos de la BD. Request del tipo GET
     //Metodo que devuelve un ResponseEntity de tipo Page<DatosListadoTopico>
     //Se le envia un parametro que llega del frontend del tipo Pageable, el cual puede ser opcional.
@@ -84,6 +103,8 @@ public class TopicoController {
     public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 3) Pageable paginacion){
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
+
+
 
 
 
