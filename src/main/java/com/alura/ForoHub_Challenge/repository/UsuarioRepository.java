@@ -9,5 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
 
+    //el metodo findByNombre retorna UserDetails, diferente al que se declaro: JpaRepository<Usuario, y
+    //no provoca error puesto que la clase Usuario esta implementando de UserDetails
     UserDetails findByNombre(String username);
 }
