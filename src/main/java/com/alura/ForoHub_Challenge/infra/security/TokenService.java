@@ -5,6 +5,8 @@ import com.alura.ForoHub_Challenge.model.Usuario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -54,10 +56,34 @@ public class TokenService {
         } catch (JWTCreationException exception){
             throw new RuntimeException();
         }
-
-
     }
 
+
+    //Metodo para validar el JWT token, que llega del usuario para
+    //saber si no esta expirado y fue asignado al usuario que inicio sesion
+    //Se toma el codigo del repositorio y se modifica a como necesitemos
+    //Enviamos el tipo de algoritmo que estamos usando con el apiSecret
+    //se retorna el nombre del usuario que esta logeado
+    public String getSubject(String token){
+        if (token == null){
+            throw new RuntimeException();
+        }
+        DecodedJWT verifier = null;
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(apiSecret); // validando firma
+            verifier = JWT.require(algorithm)
+                    .withIssuer("topicos_challeng") //valida que el emisor sea topicos_challeng
+                    .build() //hace build del objeto verifier
+                    .verify(token); //verifica el token
+            verifier.getSubject(); //verifica y obtiene el username del usuario logeado
+        } catch (JWTVerificationException exception){
+            System.out.println(exception.toString());
+        }
+        if (verifier.getSubject() == null){
+            throw new RuntimeException("verifier inválido");
+        }
+        return verifier.getSubject(); //una vez que se valido un subject no nulo, se retorna
+    }
 
 
     //Retorna un Instant. .now es a partir de ahora, .plusHours(2) se suman 2 horas que sera el
