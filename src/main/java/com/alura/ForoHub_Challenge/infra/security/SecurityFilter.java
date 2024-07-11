@@ -39,6 +39,8 @@ public class SecurityFilter extends OncePerRequestFilter {
     //obtenemos el usuario de la BD.
     //var authentication almacena un objeto usuario convertido en objeto authentication
     //Invocamos SecurityContextHolder que es una clase de Spring
+    //Finalmente, filterChain (cadena de filtros) llama al siguiente filtro. doFilter aplica el
+    //filtro y despues envia el request y response que estan llegando.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
@@ -58,3 +60,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
     }
 }
+
+
+
+
