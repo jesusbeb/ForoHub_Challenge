@@ -89,10 +89,13 @@ public class TopicoController {
     //Se necesita retornar un codigo 204, por lo que se usa la clase ResponseEntity y se usa el
     //metodo estatico noContent(), finalmente con build() se convierte a ResponseEntity
     //204 significa que la operacion fue exitosa pero no hay contenido que retornar porque se elimino el objeto
+    //Si no se valida la existencia del topico, cuando el cliente solicite eliminar un topico inexistente, el
+    //metodo retornaria una operacion exitosa
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity eliminarTopico(@PathVariable Long id){
-        topicoRepository.deleteById(id);
+        Topico topico = topicoService.validarExistencia(id);
+        topicoRepository.delete(topico);
         return ResponseEntity.noContent().build();
     }
 
