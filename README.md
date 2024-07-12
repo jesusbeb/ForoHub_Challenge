@@ -15,9 +15,19 @@
 
 <ol>
   <li>
+    <h2>Registrar Usuario</h2>
+    <p>
+      Para poder hacer uso de la API Rest es necesario registrarse como nuevo usuario, enviando en formato json el nombre, email y password.
+      El HTTP Request de tipo POST se hace en http://localhost:8080/usuarios
+    </p>
+    ![image](https://github.com/user-attachments/assets/554931e0-f878-4196-89ed-c74a58a700cb)
+
+  </li>
+
+  <li>
     <h2>Login de usuario</h2>
     <p>
-      La primera funcion disponible es para que el usuario haga login con su nombre de usuario y contraseña, los cuales son enviados en formato json. Es tambien el primer paso necesario para hacer uso de las demas funciones, ya que al logearse la 
+      Despues de haberse resistrado como nuevo usuario, es necesario hacer login con su nombre y contraseña, los cuales son enviados en formato json. Esto es indispensable para hacer uso de las demas funciones, ya que al logearse la 
       aplicacion devuelve un token de autorizacion que tendra que ser enviado en el header de los request para tener acceso a los recursos y funciones del foro. El token recibido tiene una validez de dos horas, despues es necesario volver a 
       logearse para obtener uno nuevo. 
       El HTTP Request de tipo POST se hace en http://localhost:8080/login
@@ -87,7 +97,10 @@
 
 
 <h2>Cómo usarlo</h2>
-Para hacer uso de la aplicacion, se aconseja seguir los siguientes pasos: 
+<p>
+  Para hacer uso del API Rest, se aconseja seguir los siguientes pasos: 
+</p>
+
 <ol>
   <li>
     <p>Descargar el repositorio y descomprimirlo en alguna carpeta.</p>
@@ -102,8 +115,7 @@ Para hacer uso de la aplicacion, se aconseja seguir los siguientes pasos:
   </li>
     
   <li>
-    <p>Se recomienda usar MySQL Workbench y crear una Base de Datos solo con la tabla usuarios y sus columnas id, nombre, usuario y password. Crear ahi en la BD los usuarios y el password almacenarlo
-    encriptado con BCrypt, en https://www.browserling.com/tools/bcrypt se puede hacer la encriptacion del password.
+    <p>Se recomienda usar MySQL Workbench y crear una Base de Datos sin tablas.
     </p>
   </li>
     
