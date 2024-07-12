@@ -49,10 +49,11 @@ public class SecurityConfigurations {
                 .build();
     }*/
     //Metodo generado y mejorado con ChatGPT ya que el anterior aparece como Deprecated
-    //Se ha actualizado la configuración de autorización utilizando authorizeHttpRequests() en lugar de authorizeRequests().
     //Se ha utilizado AbstractHttpConfigurer::disable para desactivar la protección CSRF de una manera más limpia y moderna
     //La configuración de la política de creación de sesiones sigue siendo la misma, utilizando sessionManagement para establecer SessionCreationPolicy.STATELESS.
+    //Se ha actualizado la configuración de autorización utilizando authorizeHttpRequests() en lugar de authorizeRequests().
     //La nueva API con authorizeHttpRequests se utiliza para configurar las reglas de autorización.
+    //.requestMatchers autoriza los HTTP Request de tipo POST que hacen match con "/usuarios" para el endpoint de registro de nuevo usuario
     //El filtro personalizado SecurityFilter se agrega antes del filtro UsernamePasswordAuthenticationFilter usando addFilterBefore.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -62,6 +63,7 @@ public class SecurityConfigurations {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

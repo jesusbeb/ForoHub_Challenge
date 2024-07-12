@@ -37,6 +37,14 @@ public class Usuario implements UserDetails {
     //private List<Topico> topicos;
 
 
+    //Constructor
+    public Usuario(String nombre, String email, String password){
+        this.nombre = nombre;
+        this.email = email;
+        this.password = password;
+    }
+
+
     //Metodos implementados de la interface
 
     //getAuthorities es para especificar el rol que va a tener el usuario dentro de la app
